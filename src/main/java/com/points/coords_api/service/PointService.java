@@ -31,4 +31,40 @@ public class PointService {
     }
     return pointRepository.save(point);
   }
+
+  public Point getById(Long id) {
+    return pointRepository.findById(id)
+      .orElseThrow(() -> new IllegalArgumentException("Ponto não encontrado"));
+  }
+
+  public double calculateDistance(Point a, Point b) {
+    final int EARTH_RADIUS_KM = 6371;
+
+    double latA = Math.toRadians(a.getLatitude());
+    double latB = Math.toRadians(b.getLatitude());
+    double deltaLat = Math.toRadians(b.getLatitude() - a.getLatitude());
+    double deltaLon = Math.toRadians(b.getLongitude() - a.getLongitude());
+
+    double h = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2)
+      + Math.cos(latA) * Math.cos(latB)
+      * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+
+    double c = 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+
+    return EARTH_RADIUS_KM * c;
+  }
+
+  public void deletePoint(Long id) {
+    if (!pointRepository.existsById(id)) {
+      throw new IllegalArgumentException("Ponto não encontrado");
+    }
+    pointRepository.deleteById(id);
+  }
+
+  public List<Point> searchByName(String name) {
+    if (name == null || name.trim().isEmpty()) {
+      throw new IllegalArgumentException("Nome é obrigatório");
+    }
+    return pointRepository.findByName(name);
+  }
 }
