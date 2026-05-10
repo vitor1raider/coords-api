@@ -20,6 +20,15 @@ public class PointService {
   }
 
   public Point createPoint(Point point) {
+    if (point.getName() == null) {
+      throw new IllegalArgumentException("Nome é obrigatório");
+    }
+    if (point.getLatitude() == null || point.getLatitude() < -90 || point.getLatitude() > 90) {
+      throw new IllegalArgumentException("Latitude deve estar entre -90 e 90");
+    }
+    if (point.getLongitude() == null || point.getLongitude() < -180 || point.getLongitude() > 180) {
+      throw new IllegalArgumentException("Longitude deve estar entre -180 e 180");
+    }
     return pointRepository.save(point);
   }
 }
