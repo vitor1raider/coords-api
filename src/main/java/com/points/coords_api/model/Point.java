@@ -10,7 +10,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import lombok.Setter;
+import lombok.Getter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "points")
 public class Point {
@@ -18,7 +22,6 @@ public class Point {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
   
   @Column(nullable = false)
   private String name;
@@ -33,6 +36,6 @@ public class Point {
   @Column(nullable = false)
   private Double longitude;
 
-  @Column(name = "created_at", nullable = false)
-  private LocalDateTime createdAt;
+  @Column(name = "created_at")
+  private LocalDateTime createdAt = LocalDateTime.now();
 }
