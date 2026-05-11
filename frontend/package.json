@@ -17,7 +17,8 @@
     "react-dom": "^19.2.6",
     "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.15.0",
-    "tailwindcss": "^4.3.0"
+    "tailwindcss": "^4.3.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
