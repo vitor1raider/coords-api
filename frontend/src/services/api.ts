@@ -12,3 +12,9 @@ export const createPoint = async (point: Omit<Point, "id" | "createdAt">) => {
 export const fetchPoints = async (): Promise<Point[]> => {
   return await api.get<Point[]>("/pontos").then((res) => res.data);
 };
+
+export const searchByName = async (name: string): Promise<Point[]> => {
+  return await api.get<Point[]>(`/pontos/busca?nome=${(name)}`).then(
+    (res) => res.data
+  );
+}

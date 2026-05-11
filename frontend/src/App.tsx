@@ -1,16 +1,16 @@
 import "./index.css";
 import { Map } from "./components/Map/Map.tsx";
 
-import { fetchPoints } from "./services/api.ts";
-import { useState, useEffect } from "react";
+import { fetchPoints, searchByName } from "./services/api.ts";
+import { useState, useEffect, useRef } from "react";
 import type { Point } from "./types/point.ts";
-import { Loader, Search } from "lucide-react";
+import { LoaderCircle, Search } from "lucide-react";
 import { FormPoint } from "./components/FormPoint/index.tsx";
 
 function App() {
   const [points, setPoints] = useState<Point[]>([]);
-  const [searchName, setSearchName] = useState("");
   const [loading, setLoading] = useState(false);
+  const searchName = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const loadPoints = async () => {
@@ -27,8 +27,24 @@ function App() {
     loadPoints();
   }, []);
 
-  const handleSearch = async () => {
-  }
+  const handleSearch = async (name: string) => {
+    setLoading(true);
+
+    const searchField = name.trim();
+
+    try {
+      const search = searchField
+        ? await searchByName(searchField)
+        : await fetchPoints();
+
+      setPoints(search);
+    } catch {
+      console.error("Failed to search points");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   return (
     <main className="flex h-screen m-auto container py-10">
       <div className="flex flex-col px-4">
@@ -42,11 +58,10 @@ function App() {
                 id="search"
                 className="w-full text-sm rounded-md border border-neutral-200 outline-none focus:ring-1 focus:shadow-md focus:ring-blue-700 h-9 pl-2"
                 placeholder="Buscar por nome"
-                value={searchName}
-                onChange={(event) => setSearchName(event.target.value)}
+                ref={searchName}
                 onKeyDown={(event) => {
                   if (event.key === "Enter") {
-                    handleSearch();
+                    handleSearch(searchName.current?.value || "");
                   }
                 }}
               />
@@ -54,9 +69,9 @@ function App() {
             <button
               type="button"
               className="cursor-pointer flex items-center justify-center text-white bg-blue-700 h-9 w-9 rounded-md  hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-700"
-              onClick={() => handleSearch()}
+              onClick={() => handleSearch(searchName.current?.value || "")}
             >
-              {loading ? <Loader /> : <Search size={16} strokeWidth={3} />}
+              {loading ? <LoaderCircle /> : <Search size={16} strokeWidth={3} />}
             </button>
           </div>
           <div className="space-y-2 h-100 overflow-y-auto">
