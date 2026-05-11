@@ -1,10 +1,9 @@
 import "./index.css";
 import { Map } from "./components/Map/Map.tsx";
-
-import { fetchPoints, searchByName } from "./services/api.ts";
+import { deletePoint, fetchPoints, searchByName } from "./services/api.ts";
 import { useState, useEffect, useRef } from "react";
 import type { Point } from "./types/point.ts";
-import { LoaderCircle, Search } from "lucide-react";
+import { LoaderCircle, Search, Trash2 } from "lucide-react";
 import { FormPoint } from "./components/FormPoint/index.tsx";
 
 function App() {
@@ -44,7 +43,17 @@ function App() {
       setLoading(false);
     }
   };
-  
+
+  const handleDeletePoint = async (id: number) => {
+    const confirmed = window.confirm(
+      `Tem certeza que deseja excluir o ponto ${points.find((p) => p.id === id)?.name}?`,
+    );
+    if (confirmed) {
+      await deletePoint(id);
+      setPoints((prev) => prev.filter((p) => p.id !== id));
+    }
+  };
+
   return (
     <main className="flex h-screen m-auto container py-10">
       <div className="flex flex-col px-4">
@@ -71,7 +80,11 @@ function App() {
               className="cursor-pointer flex items-center justify-center text-white bg-blue-700 h-9 w-9 rounded-md  hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-700"
               onClick={() => handleSearch(searchName.current?.value || "")}
             >
-              {loading ? <LoaderCircle /> : <Search size={16} strokeWidth={3} />}
+              {loading ? (
+                <LoaderCircle />
+              ) : (
+                <Search size={16} strokeWidth={3} />
+              )}
             </button>
           </div>
           <div className="space-y-2 h-100 overflow-y-auto">
@@ -89,6 +102,16 @@ function App() {
                     </span>
                   </div>
                 </div>
+                <button
+                  type="button"
+                  className="cursor-pointer p-2"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeletePoint(point.id);
+                  }}
+                >
+                  <Trash2 size={16} color="red" />
+                </button>
               </div>
             ))}
           </div>

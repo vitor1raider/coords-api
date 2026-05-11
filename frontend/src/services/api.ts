@@ -18,3 +18,7 @@ export const searchByName = async (name: string): Promise<Point[]> => {
     (res) => res.data
   );
 }
+
+export const deletePoint = async (id: number) => {
+  await api.delete(`/pontos/${id}`);
+}
