@@ -2,6 +2,7 @@ package com.points.coords_api.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.points.coords_api.dto.DistanceResponseDTO;
 import com.points.coords_api.model.Point;
 import com.points.coords_api.service.PointService;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/pontos")
 public class PointController {
@@ -39,10 +42,11 @@ public class PointController {
   }
 
   @GetMapping("/distancia")
-  public double calculateDistance(@RequestParam Long id1, @RequestParam Long id2) {
+  public DistanceResponseDTO calculateDistance(@RequestParam Long id1, @RequestParam Long id2) {
     Point pointA = pointService.getById(id1);
     Point pointB = pointService.getById(id2);
-    return pointService.calculateDistance(pointA, pointB);
+    PointService.Distance distance = pointService.calculateDistance(pointA, pointB);
+    return new DistanceResponseDTO(distance.value(), distance.unit());
   }
 
   @DeleteMapping("/{id}")

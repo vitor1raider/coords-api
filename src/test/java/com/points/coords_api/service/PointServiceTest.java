@@ -1,6 +1,7 @@
 package com.points.coords_api.service;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
@@ -64,6 +65,23 @@ public class PointServiceTest {
     point.setLongitude(null);
 
     assertThrows(IllegalArgumentException.class, () -> pointService.createPoint(point));
+  }
+
+  @Test
+  @DisplayName("Should calculate distance between two known points")
+  void shouldCalculateDistanceBetweenTwoPoints() {
+    Point pointA = new Point();
+    pointA.setLatitude(-27.59);
+    pointA.setLongitude(-48.54);
+
+    Point pointB = new Point();
+    pointB.setLatitude(-22.90);
+    pointB.setLongitude(-43.17);
+
+    PointService.Distance distance = pointService.calculateDistance(pointA, pointB);
+
+    assertEquals(750.0, distance.value(), 20.0); 
+    assertEquals("km", distance.unit());
   }
 
   @Test

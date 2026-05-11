@@ -37,7 +37,14 @@ public class PointService {
       .orElseThrow(() -> new IllegalArgumentException("Ponto não encontrado"));
   }
 
-  public double calculateDistance(Point a, Point b) {
+  public record Distance(double value, String unit) {
+    @Override
+    public String toString() {
+        return value + " " + unit;
+    }
+  }
+
+  public Distance calculateDistance(Point a, Point b) {
     final int EARTH_RADIUS_KM = 6371;
 
     double latA = Math.toRadians(a.getLatitude());
@@ -51,7 +58,7 @@ public class PointService {
 
     double c = 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
 
-    return EARTH_RADIUS_KM * c;
+    return new Distance(Math.round(EARTH_RADIUS_KM * c * 100.0) / 100.0, "km");
   }
 
   public void deletePoint(Long id) {
