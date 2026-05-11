@@ -12,7 +12,7 @@ export function FormPoint() {
     setName("");
     setLatitude("");
     setLongitude("");
-  }
+  };
 
   const handleCreatePoint = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -46,12 +46,12 @@ export function FormPoint() {
       onSubmit={handleCreatePoint}
       className="flex bg-white rounded-lg flex-col w-full space-y-2 p-5 border border-neutral-200"
     >
-      <header className="py-3 text-black">
+      <div className="mb-4 text-black">
         <h1 className="text-2xl font-semibold">Gerenciador de Pontos</h1>
         <p className="text-sm muted">
           Adicione, busque e visualize pontos no mapa
         </p>
-      </header>
+      </div>
       <div>
         <label htmlFor="point-name" className="text-neutral-900 text-sm">
           Nome:
