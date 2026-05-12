@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import type { Point } from "../../types/point";
 import { pointSchema } from "../../libs/validator";
 import { createPoint } from "../../services/api";
 
@@ -7,6 +8,7 @@ interface FormPointProps {
   longitude: string;
   onLatitudeChange: (value: string) => void;
   onLongitudeChange: (value: string) => void;
+  onCreate?: (point: Point) => void;
 }
 
 export function FormPoint({
@@ -14,6 +16,7 @@ export function FormPoint({
   longitude,
   onLatitudeChange,
   onLongitudeChange,
+  onCreate,
 }: FormPointProps) {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -40,11 +43,12 @@ export function FormPoint({
 
     setLoading(true);
     try {
-      await createPoint({
+      const newPoint = await createPoint({
         name: validation.data.name,
         latitude: validation.data.latitude,
         longitude: validation.data.longitude,
       });
+      onCreate?.(newPoint);
       handleClearForm();
     } finally {
       setLoading(false);

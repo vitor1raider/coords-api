@@ -147,6 +147,7 @@ function App() {
             longitude={formLongitude}
             onLatitudeChange={setFormLatitude}
             onLongitudeChange={setFormLongitude}
+            onCreate={(newPoint) => setPoints((prev) => [newPoint, ...prev])}
           />
           <div className="flex bg-white md:h-full max-h-80 md:max-h-full overflow-y-auto p-5 border border-neutral-200 rounded-lg mt-5 flex-col gap-2">
             <div className="flex items-center gap-2 rounded-md border border-blue-200 bg-sky-100/80 p-2 text-xs text-slate-600 shadow-sm">
