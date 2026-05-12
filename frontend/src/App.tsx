@@ -157,14 +157,13 @@ function App() {
                 de distância.
               </p>
             </div>
-            <p className="text-sm">Pontos ({points.length})</p>
             <div className="flex gap-2 items-end justify-end relative">
               <div className="w-full">
                 <input
                   type="text"
                   id="search"
                   className="w-full text-sm rounded-md border border-neutral-200 outline-none focus:ring-1 focus:shadow-md focus:ring-blue-700 h-9 pl-2"
-                  placeholder="Buscar por nome"
+                  placeholder="Buscar por nome do ponto"
                   ref={searchName}
                   onKeyDown={(event) => {
                     if (event.key === "Enter") {
@@ -185,6 +184,16 @@ function App() {
                 )}
               </button>
             </div>
+            <p className="text-xs text-neutral-500 mt-2">
+              Pontos ({points.length})
+            </p>
+            {points.length === 0 && (
+              <div className="border border-neutral-200 p-4 flex items-center justify-center rounded">
+                <p className="text-sm text-neutral-500">
+                  Nenhum ponto encontrado
+                </p>
+              </div>
+            )}
             <div className="space-y-2 overflow-y-auto flex-1 min-h-0">
               {points.map((point) => (
                 <div
