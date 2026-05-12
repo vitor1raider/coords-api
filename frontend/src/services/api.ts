@@ -22,3 +22,9 @@ export const searchByName = async (name: string): Promise<Point[]> => {
 export const deletePoint = async (id: number) => {
   await api.delete(`/pontos/${id}`);
 }
+
+export const calculateDistance = async (id1: number, id2: number) => {
+  return await api.get<{ distance: number }>(`/pontos/distancia?id1=${id1}&id2=${id2}`).then(
+    (res) => res.data.distance
+  );
+}

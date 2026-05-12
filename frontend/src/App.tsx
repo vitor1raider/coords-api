@@ -1,5 +1,5 @@
 import "./index.css";
-import { Map } from "./components/Map/Map.tsx";
+import { Map } from "./components/Map/index.tsx";
 import { deletePoint, fetchPoints, searchByName } from "./services/api.ts";
 import { useState, useEffect, useRef } from "react";
 import type { Point } from "./types/point.ts";
