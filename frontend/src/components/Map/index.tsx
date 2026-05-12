@@ -6,8 +6,31 @@ import {
   TileLayer,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 import type { Point } from "../../types/point";
 import { useMapEvents } from "react-leaflet";
+
+const defaultIcon = L.icon({
+  iconUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
+const selectedIcon = L.icon({
+  iconUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  shadowUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  iconSize: [32, 50],
+  iconAnchor: [16, 50],
+  popupAnchor: [1, -42],
+  shadowSize: [41, 41],
+});
 
 interface MapProps {
   points: Point[];
@@ -73,6 +96,7 @@ export function Map({
         <Marker
           key={point.id}
           position={[point.latitude, point.longitude]}
+          icon={selectedPoints.includes(point.id) ? selectedIcon : defaultIcon}
           eventHandlers={{
             click: () => onSelectPoint(point.id),
           }}
