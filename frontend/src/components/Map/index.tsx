@@ -8,15 +8,12 @@ import {
 import "leaflet/dist/leaflet.css";
 import type { Point } from "../../types/point";
 import { useMapEvents } from "react-leaflet";
-import { useEffect } from "react";
-import { calculateDistance } from "../../services/api";
 
 interface MapProps {
   points: Point[];
   onMapClick?: (latitude: number, longitude: number) => void;
   selectedPoints: number[];
   onSelectPoint: (id: number) => void;
-  onClearSelection: () => void;
 }
 
 function MapClickHandler({
@@ -38,26 +35,7 @@ export function Map({
   onMapClick,
   selectedPoints,
   onSelectPoint,
-  onClearSelection,
 }: MapProps) {
-  useEffect(() => {
-    const fetchDistance = async () => {
-      if (selectedPoints.length === 2) {
-        const point1 = points.find((p) => p.id === selectedPoints[0]);
-        const point2 = points.find((p) => p.id === selectedPoints[1]);
-
-        if (point1 && point2) {
-          const distance = await calculateDistance(point1.id, point2.id);
-          alert(
-            `Distância entre ${point1.name} e ${point2.name}: ${distance} km`,
-          );
-          onClearSelection();
-        }
-      }
-    };
-    fetchDistance();
-  }, [selectedPoints, points, onClearSelection]);
-
   return (
     <MapContainer
       center={[-27.09, -48.91]}
