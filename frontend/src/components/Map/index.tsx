@@ -8,12 +8,15 @@ import {
 import "leaflet/dist/leaflet.css";
 import type { Point } from "../../types/point";
 import { useMapEvents } from "react-leaflet";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { calculateDistance } from "../../services/api";
 
 interface MapProps {
   points: Point[];
   onMapClick?: (latitude: number, longitude: number) => void;
+  selectedPoints: number[];
+  onSelectPoint: (id: number) => void;
+  onClearSelection: () => void;
 }
 
 function MapClickHandler({
@@ -30,20 +33,13 @@ function MapClickHandler({
   return null;
 }
 
-export function Map({ points, onMapClick }: MapProps) {
-  const [selectedPoints, setSelectedPoints] = useState<number[]>([]);
-
-  const handleMarkerClick = (id: number) => {
-    setSelectedPoints((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((pid) => pid !== id);
-      } else if (prev.length < 2) {
-        return [...prev, id];
-      }
-      return prev;
-    });
-  };
-
+export function Map({
+  points,
+  onMapClick,
+  selectedPoints,
+  onSelectPoint,
+  onClearSelection,
+}: MapProps) {
   useEffect(() => {
     const fetchDistance = async () => {
       if (selectedPoints.length === 2) {
@@ -55,11 +51,12 @@ export function Map({ points, onMapClick }: MapProps) {
           alert(
             `Distância entre ${point1.name} e ${point2.name}: ${distance} km`,
           );
+          onClearSelection();
         }
       }
     };
     fetchDistance();
-  }, [selectedPoints, points]);
+  }, [selectedPoints, points, onClearSelection]);
 
   return (
     <MapContainer
@@ -90,7 +87,7 @@ export function Map({ points, onMapClick }: MapProps) {
           .map((p) => [p!.latitude, p!.longitude])}
         color="#3b82f6"
         weight={3}
-        opacity={0.8}
+        opacity={1}
         dashArray="5, 5"
       />
       <MapClickHandler onMapClick={onMapClick} />
@@ -99,7 +96,7 @@ export function Map({ points, onMapClick }: MapProps) {
           key={point.id}
           position={[point.latitude, point.longitude]}
           eventHandlers={{
-            click: () => handleMarkerClick(point.id),
+            click: () => onSelectPoint(point.id),
           }}
         >
           <Popup>

@@ -3,7 +3,7 @@ import { Map } from "./components/Map/index.tsx";
 import { deletePoint, fetchPoints, searchByName } from "./services/api.ts";
 import { useState, useEffect, useRef } from "react";
 import type { Point } from "./types/point.ts";
-import { LoaderCircle, Search, Trash2 } from "lucide-react";
+import { Check, LoaderCircle, Search, Trash2 } from "lucide-react";
 import { FormPoint } from "./components/FormPoint/index.tsx";
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [formLatitude, setFormLatitude] = useState("");
   const [formLongitude, setFormLongitude] = useState("");
+  const [selectedPoints, setSelectedPoints] = useState<number[]>([]);
   const searchName = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -61,6 +62,24 @@ function App() {
     setFormLongitude(longitude.toFixed(6));
   };
 
+  const handleSelectPoint = (id: number) => {
+    setSelectedPoints((current) => {
+      if (current.includes(id)) {
+        return current.filter((selectedId) => selectedId !== id);
+      }
+
+      if (current.length < 2) {
+        return [...current, id];
+      }
+
+      return [current[1], id];
+    });
+  };
+
+  const handleClearSelection = () => {
+    setSelectedPoints([]);
+  };
+
   console.log(points)
 
   return (
@@ -105,9 +124,17 @@ function App() {
             {points.map((point) => (
               <div
                 key={point.id}
-                className={`p-3 border border-neutral-200 rounded-lg flex items-center justify-between cursor-pointer transition-all`}
+                  onClick={() => handleSelectPoint(point.id)}
+                  className={`p-3 rounded-lg flex items-center justify-between cursor-pointer transition-all border ${
+                    selectedPoints.includes(point.id)
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-neutral-200"
+                  }`}
               >
                 <div className="flex items-center gap-2 flex-1">
+                    {selectedPoints.includes(point.id) && (
+                      <Check size={16} className="text-blue-600 shrink-0" />
+                    )}
                   <div>
                     <p className="font-bold text-sm">{point.name}</p>
                     <span className="text-xs text-neutral-600">
@@ -132,7 +159,13 @@ function App() {
         </div>
       </div>
       <div className="w-full h-full">
-        <Map points={points} onMapClick={handleMapClick} />
+        <Map
+          points={points}
+          onMapClick={handleMapClick}
+          selectedPoints={selectedPoints}
+          onSelectPoint={handleSelectPoint}
+          onClearSelection={handleClearSelection}
+        />
       </div>
     </main>
   );
