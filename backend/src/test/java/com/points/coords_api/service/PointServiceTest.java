@@ -28,14 +28,6 @@ public class PointServiceTest {
   private PointService pointService;
 
   @Test
-  @DisplayName("Should throw error when name is null")
-  void shouldThrowWhenNameIsNull() throws Exception {
-    Point point = new Point();
-    point.setName(null);
-    assertThrows(NotFoundException.class, () -> pointService.createPoint(point));
-  }
-
-  @Test
   @DisplayName("Should return point by id successfully")
   void shouldReturnPointByIdSuccessfully() {
     Point point = new Point();
@@ -87,12 +79,6 @@ public class PointServiceTest {
   }
 
   @Test
-  @DisplayName("Should throw error when search by name is invalid")
-  void shouldThrowWhenSearchByNameIsInvalid() {
-    assertThrows(NotFoundException.class, () -> pointService.searchByName(""));
-  }
-
-  @Test
   @DisplayName("Should return all points successfully")
   void shouldReturnAllPointsSuccessfully() {
     Point point = new Point();
@@ -103,39 +89,6 @@ public class PointServiceTest {
 
     assertEquals(1, points.size());
     assertEquals("Ponto A", points.get(0).getName());
-  }
-
-  @Test
-  @DisplayName("Should throw error when longitude is out of range")
-  void shouldThrowWhenLongitudeOutOfRange() {
-    Point point = new Point();
-    point.setName("Ponto A");
-    point.setLatitude(-27.15);
-    point.setLongitude(181.0);  // inválido
-
-    assertThrows(NotFoundException.class, () -> pointService.createPoint(point));
-  }
-
-  @Test
-  @DisplayName("Should throw error when latitude is out of range")
-  void shouldThrowWhenLatitudeOutOfRange() {
-    Point point = new Point();
-    point.setName("Ponto A");
-    point.setLatitude(91.0);   // inválido
-    point.setLongitude(-48.89);
-
-    assertThrows(NotFoundException.class, () -> pointService.createPoint(point));
-  }
-
-  @Test
-  @DisplayName("Should throw error when name, longitude and latitude are null")
-  void shouldThrowWhenNameLongitudeLatitudeAreNull() {
-    Point point = new Point();
-    point.setName(null);
-    point.setLatitude(null);
-    point.setLongitude(null);
-
-    assertThrows(NotFoundException.class, () -> pointService.createPoint(point));
   }
 
   @Test

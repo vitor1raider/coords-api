@@ -30,6 +30,7 @@ public class PointService {
     if (point.getLongitude() == null || point.getLongitude() < -180 || point.getLongitude() > 180) {
       throw new NotFoundException("Longitude deve estar entre -180 e 180");
     }
+
     return pointRepository.save(point);
   }
 
@@ -73,6 +74,7 @@ public class PointService {
     if (name == null || name.trim().isEmpty()) {
       throw new NotFoundException("Nome é obrigatório");
     }
+
     return pointRepository.findByName(name);
   }
 }

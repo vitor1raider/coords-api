@@ -16,6 +16,8 @@ import com.points.coords_api.dto.DistanceResponseDTO;
 import com.points.coords_api.model.Point;
 import com.points.coords_api.service.PointService;
 
+import jakarta.validation.Valid;
+
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/pontos")
@@ -32,7 +34,7 @@ public class PointController {
   }
 
   @PostMapping
-  public Point createPoint(@RequestBody Point point) {
+  public Point createPoint(@Valid @RequestBody Point point) {
     return pointService.createPoint(point);
   }
 
