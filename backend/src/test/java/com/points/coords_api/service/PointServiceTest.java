@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.points.coords_api.exceptions.NotFoundException;
 import com.points.coords_api.model.Point;
 import com.points.coords_api.repository.PointRepository;
 
@@ -31,7 +32,77 @@ public class PointServiceTest {
   void shouldThrowWhenNameIsNull() throws Exception {
     Point point = new Point();
     point.setName(null);
-    assertThrows(IllegalArgumentException.class, () -> pointService.createPoint(point));
+    assertThrows(NotFoundException.class, () -> pointService.createPoint(point));
+  }
+
+  @Test
+  @DisplayName("Should return point by id successfully")
+  void shouldReturnPointByIdSuccessfully() {
+    Point point = new Point();
+    point.setName("Ponto A");
+    when(pointRepository.findById(1L)).thenReturn(java.util.Optional.of(point));
+
+    Point foundPoint = pointService.getById(1L);
+
+    assertNotNull(foundPoint);
+    assertEquals("Ponto A", foundPoint.getName());
+  }
+
+  @Test
+  @DisplayName("Should throw error when name is not found by id")
+  void shouldThrowWhenNameIsNotFound() {
+    when(pointRepository.findById(1L)).thenReturn(java.util.Optional.empty());
+    assertThrows(NotFoundException.class, () -> pointService.getById(1L));
+  }
+
+  @Test
+  @DisplayName("Should delete point successfully when id exists")
+  void shouldDeletePointSuccessfullyWhenIdExists() {
+    when(pointRepository.existsById(1L)).thenReturn(true);
+
+    assertDoesNotThrow(() -> pointService.deletePoint(1L));
+
+    verify(pointRepository, times(1)).deleteById(1L);
+  }
+
+  @Test
+  @DisplayName("Should throw error when delete point id does not exist")
+  void shouldThrowWhenDeletePointIdDoesNotExist() {
+    when(pointRepository.existsById(1L)).thenReturn(false);
+
+    assertThrows(NotFoundException.class, () -> pointService.deletePoint(1L));
+  }
+
+  @Test
+  @DisplayName("Should return points by name successfully")
+  void shouldReturnPointsByNameSuccessfully() {
+    Point point = new Point();
+    point.setName("Ponto A");
+    when(pointRepository.findByName("Ponto A")).thenReturn(java.util.List.of(point));
+
+    var points = pointService.searchByName("Ponto A");
+
+    assertEquals(1, points.size());
+    assertEquals("Ponto A", points.get(0).getName());
+  }
+
+  @Test
+  @DisplayName("Should throw error when search by name is invalid")
+  void shouldThrowWhenSearchByNameIsInvalid() {
+    assertThrows(NotFoundException.class, () -> pointService.searchByName(""));
+  }
+
+  @Test
+  @DisplayName("Should return all points successfully")
+  void shouldReturnAllPointsSuccessfully() {
+    Point point = new Point();
+    point.setName("Ponto A");
+    when(pointRepository.findAll()).thenReturn(java.util.List.of(point));
+
+    var points = pointService.getAllPoints();
+
+    assertEquals(1, points.size());
+    assertEquals("Ponto A", points.get(0).getName());
   }
 
   @Test
@@ -42,7 +113,7 @@ public class PointServiceTest {
     point.setLatitude(-27.15);
     point.setLongitude(181.0);  // inválido
 
-    assertThrows(IllegalArgumentException.class, () -> pointService.createPoint(point));
+    assertThrows(NotFoundException.class, () -> pointService.createPoint(point));
   }
 
   @Test
@@ -53,7 +124,7 @@ public class PointServiceTest {
     point.setLatitude(91.0);   // inválido
     point.setLongitude(-48.89);
 
-    assertThrows(IllegalArgumentException.class, () -> pointService.createPoint(point));
+    assertThrows(NotFoundException.class, () -> pointService.createPoint(point));
   }
 
   @Test
@@ -64,7 +135,7 @@ public class PointServiceTest {
     point.setLatitude(null);
     point.setLongitude(null);
 
-    assertThrows(IllegalArgumentException.class, () -> pointService.createPoint(point));
+    assertThrows(NotFoundException.class, () -> pointService.createPoint(point));
   }
 
   @Test
@@ -85,8 +156,8 @@ public class PointServiceTest {
   }
 
   @Test
-  @DisplayName("Should accept boundary latitude values")
-  void shouldAcceptBoundaryLatitude() {
+  @DisplayName("Should accept boundary latitude value successfully")
+  void shouldAcceptBoundaryLatitudeValueSuccessfully() {
     Point point = new Point();
     point.setName("Ponto A");
     point.setLatitude(-90.0);
@@ -98,8 +169,8 @@ public class PointServiceTest {
   }
 
   @Test
-  @DisplayName("Should save point when data is valid")
-  void shouldSavePointWhenValid() {
+  @DisplayName("Should save point successfully when data is valid")
+  void shouldSavePointSuccessfullyWhenValid() {
     Point point = new Point();
     point.setName("Ponto A");
     point.setLatitude(-27.15);
