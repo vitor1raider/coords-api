@@ -47,7 +47,7 @@ export function Map({
         [90, 180],
       ]}
       maxBoundsViscosity={1.0}
-      className="w-full h-full rounded-2xl"
+      className="w-full h-full rounded-lg"
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

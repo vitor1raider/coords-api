@@ -5,8 +5,8 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080",
 });
 
-export const createPoint = async (point: Omit<Point, "id" | "createdAt">) => {
-  await api.post("/pontos", point);
+export const createPoint = async (point: Omit<Point, "id" | "createdAt">): Promise<Point> => {
+  return await api.post<Point>("/pontos", point).then((res) => res.data);
 };
 
 export const fetchPoints = async (): Promise<Point[]> => {

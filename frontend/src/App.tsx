@@ -131,16 +131,25 @@ function App() {
 
   return (
     <>
-      <main className="flex h-screen m-auto container py-10">
-        <div className="flex flex-col px-4">
+      <main className="flex flex-col md:flex-row h-screen m-auto container py-4 md:py-10 px-4 gap-4">
+        <div className="w-full h-[55vw] min-h-65 md:h-full md:min-h-0 order-first md:order-last">
+          <Map
+            points={points}
+            onMapClick={handleMapClick}
+            selectedPoints={selectedPoints}
+            onSelectPoint={handleSelectPoint}
+          />
+        </div>
+
+        <div className="flex flex-col md:w-80 lg:w-100 md:shrink-0 order-last md:order-first">
           <FormPoint
             latitude={formLatitude}
             longitude={formLongitude}
             onLatitudeChange={setFormLatitude}
             onLongitudeChange={setFormLongitude}
           />
-          <div className="flex bg-white h-full p-5 border border-neutral-200 rounded-lg mt-5 flex-col gap-2">
-            <p>Pontos ({points.length})</p>
+          <div className="flex bg-white md:h-full max-h-80 md:max-h-full overflow-y-auto p-5 border border-neutral-200 rounded-lg mt-5 flex-col gap-2">
+            <p className="text-sm">Pontos ({points.length})</p>
             <div className="flex gap-2 items-end justify-end relative">
               <div className="w-full">
                 <input
@@ -158,7 +167,7 @@ function App() {
               </div>
               <button
                 type="button"
-                className="cursor-pointer flex items-center justify-center text-white bg-blue-700 h-9 w-9 rounded-md  hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-700"
+                className="cursor-pointer flex items-center justify-center text-white bg-blue-700 h-9 w-9 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-700"
                 onClick={() => handleSearch(searchName.current?.value || "")}
               >
                 {loading ? (
@@ -168,7 +177,7 @@ function App() {
                 )}
               </button>
             </div>
-            <div className="space-y-2 h-100 overflow-y-auto">
+            <div className="space-y-2 overflow-y-auto flex-1 min-h-0">
               {points.map((point) => (
                 <div
                   key={point.id}
@@ -205,14 +214,6 @@ function App() {
               ))}
             </div>
           </div>
-        </div>
-        <div className="w-full h-full">
-          <Map
-            points={points}
-            onMapClick={handleMapClick}
-            selectedPoints={selectedPoints}
-            onSelectPoint={handleSelectPoint}
-          />
         </div>
       </main>
 

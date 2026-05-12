@@ -5,8 +5,3 @@ export interface Point {
   longitude: number;
   createdAt: string;
 }
-
-export interface DistanceResponse {
-  distance: number;
-  unit: string;
-}

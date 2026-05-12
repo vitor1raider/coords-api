@@ -76,7 +76,7 @@ export function FormPoint({
         />
       </div>
 
-      <div className="w-full flex gap-2">
+      <div className="w-full flex flex-col lg:flex-row gap-2">
         <div className="w-full">
           <label htmlFor="point-latitude" className="text-neutral-900 text-sm">
             Latitude:
