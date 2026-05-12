@@ -8,7 +8,7 @@ import {
 } from "./services/api.ts";
 import { useState, useEffect, useRef } from "react";
 import type { Point } from "./types/point.ts";
-import { Check, LoaderCircle, Search, Trash2 } from "lucide-react";
+import { Check, Info, LoaderCircle, Search, Trash2 } from "lucide-react";
 import { FormPoint } from "./components/FormPoint/index.tsx";
 import { Modal } from "./components/Modal/index.tsx";
 
@@ -149,6 +149,13 @@ function App() {
             onLongitudeChange={setFormLongitude}
           />
           <div className="flex bg-white md:h-full max-h-80 md:max-h-full overflow-y-auto p-5 border border-neutral-200 rounded-lg mt-5 flex-col gap-2">
+            <div className="flex items-center gap-2 rounded-md border border-blue-200 bg-sky-100/80 p-2 text-xs text-slate-600 shadow-sm">
+              <Info size={20} className="text-sky-600" />
+              <p className="leading-relaxed font-medium text-sky-600">
+                Selecione dois pontos no mapa ou na lista para efetuar o cálculo
+                de distância.
+              </p>
+            </div>
             <p className="text-sm">Pontos ({points.length})</p>
             <div className="flex gap-2 items-end justify-end relative">
               <div className="w-full">
