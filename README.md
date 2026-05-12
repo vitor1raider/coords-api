@@ -63,7 +63,7 @@ ou
 ## 🐳 Executando com Docker
 Na raiz do projeto:
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 A aplicação ficará disponível em:
@@ -83,15 +83,12 @@ Certifique-se de que o PostgreSQL está rodando. Crie um banco:
 CREATE DATABASE coordsdb;
 ```
 
-#### 2. Configurar variáveis de ambiente
+#### 2. Configurar variáveis de ambiente (altere para as suas credenciais)
 Configure o arquivo `backend/src/main/resources/application.properties`:
 ```properties
-SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/coordsdb
-SPRING_DATASOURCE_USERNAME=postgres
-SPRING_DATASOURCE_PASSWORD=postgres
-
-SPRING_JPA_HIBERNATE_DDL_AUTO=validate
-SPRING_JPA_SHOW_SQL=false
+spring.datasource.url=jdbc:postgresql://localhost:5432/coordsdb
+spring.datasource.username=postgres
+spring.datasource.password=postgres
 ```
 
 #### 3. Executar backend
