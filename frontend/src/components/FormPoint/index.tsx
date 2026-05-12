@@ -2,16 +2,26 @@ import { useState, type FormEvent } from "react";
 import { pointSchema } from "../../libs/validator";
 import { createPoint } from "../../services/api";
 
-export function FormPoint() {
+interface FormPointProps {
+  latitude: string;
+  longitude: string;
+  onLatitudeChange: (value: string) => void;
+  onLongitudeChange: (value: string) => void;
+}
+
+export function FormPoint({
+  latitude,
+  longitude,
+  onLatitudeChange,
+  onLongitudeChange,
+}: FormPointProps) {
   const [name, setName] = useState("");
-  const [latitude, setLatitude] = useState("");
-  const [longitude, setLongitude] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleClearForm = () => {
     setName("");
-    setLatitude("");
-    setLongitude("");
+    onLatitudeChange("");
+    onLongitudeChange("");
   };
 
   const handleCreatePoint = async (event: FormEvent<HTMLFormElement>) => {
@@ -76,7 +86,7 @@ export function FormPoint() {
             id="point-latitude"
             step="any"
             value={latitude}
-            onChange={(event) => setLatitude(event.target.value)}
+            onChange={(event) => onLatitudeChange(event.target.value)}
             placeholder="Informe a latitude"
             className="w-full text-sm rounded-md border border-neutral-200 outline-none focus:ring-1 focus:shadow-md focus:ring-blue-700 h-9 pl-2"
           />
@@ -90,7 +100,7 @@ export function FormPoint() {
             id="point-longitude"
             step="any"
             value={longitude}
-            onChange={(event) => setLongitude(event.target.value)}
+            onChange={(event) => onLongitudeChange(event.target.value)}
             placeholder="Informe a longitude"
             className="w-full text-sm rounded-md border border-neutral-200 outline-none focus:ring-1 focus:shadow-md focus:ring-blue-700 h-9 pl-2"
           />

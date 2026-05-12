@@ -9,6 +9,8 @@ import { FormPoint } from "./components/FormPoint/index.tsx";
 function App() {
   const [points, setPoints] = useState<Point[]>([]);
   const [loading, setLoading] = useState(false);
+  const [formLatitude, setFormLatitude] = useState("");
+  const [formLongitude, setFormLongitude] = useState("");
   const searchName = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -54,10 +56,22 @@ function App() {
     }
   };
 
+  const handleMapClick = (latitude: number, longitude: number) => {
+    setFormLatitude(latitude.toFixed(6));
+    setFormLongitude(longitude.toFixed(6));
+  };
+
+  console.log(points)
+
   return (
     <main className="flex h-screen m-auto container py-10">
       <div className="flex flex-col px-4">
-        <FormPoint />
+        <FormPoint
+          latitude={formLatitude}
+          longitude={formLongitude}
+          onLatitudeChange={setFormLatitude}
+          onLongitudeChange={setFormLongitude}
+        />
         <div className="flex bg-white h-full p-5 border border-neutral-200 rounded-lg mt-5 flex-col gap-2">
           <p>Pontos ({points.length})</p>
           <div className="flex gap-2 items-end justify-end relative">
@@ -118,7 +132,7 @@ function App() {
         </div>
       </div>
       <div className="w-full h-full">
-        <Map />
+        <Map points={points} onMapClick={handleMapClick} />
       </div>
     </main>
   );
