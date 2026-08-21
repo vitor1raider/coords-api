@@ -35,6 +35,7 @@ const selectedIcon = L.icon({
 interface MapProps {
   points: Point[];
   onMapClick?: (latitude: number, longitude: number) => void;
+  previewPosition?: [number, number] | null;
   selectedPoints: number[];
   onSelectPoint: (id: number) => void;
 }
@@ -56,6 +57,7 @@ function MapClickHandler({
 export function Map({
   points,
   onMapClick,
+  previewPosition,
   selectedPoints,
   onSelectPoint,
 }: MapProps) {
@@ -92,6 +94,20 @@ export function Map({
         dashArray="5, 5"
       />
       <MapClickHandler onMapClick={onMapClick} />
+      {previewPosition && (
+        <Marker
+          position={previewPosition}
+          icon={defaultIcon}
+          opacity={0.72}
+          zIndexOffset={1000}
+        >
+          <Popup>
+            <strong>Pré-visualização do novo ponto</strong>
+            <br />
+            {previewPosition[0].toFixed(6)}, {previewPosition[1].toFixed(6)}
+          </Popup>
+        </Marker>
+      )}
       {points.map((point) => (
         <Marker
           key={point.id}
